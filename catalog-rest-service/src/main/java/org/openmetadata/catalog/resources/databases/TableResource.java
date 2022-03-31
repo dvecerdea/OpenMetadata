@@ -86,7 +86,9 @@ public class TableResource extends EntityResource<Table, TableRepository> {
 
   @Override
   public Table addHref(UriInfo uriInfo, Table table) {
+    Entity.withHref(uriInfo, table.getSchema());
     Entity.withHref(uriInfo, table.getDatabase());
+    Entity.withHref(uriInfo, table.getService());
     Entity.withHref(uriInfo, table.getLocation());
     Entity.withHref(uriInfo, table.getOwner());
     Entity.withHref(uriInfo, table.getFollowers());
@@ -624,6 +626,7 @@ public class TableResource extends EntityResource<Table, TableRepository> {
   }
 
   private Table getTable(SecurityContext securityContext, CreateTable create) {
+    System.out.println("XXX " + create.getSchema());
     return validateNewTable(
         new Table()
             .withId(UUID.randomUUID())
@@ -639,7 +642,7 @@ public class TableResource extends EntityResource<Table, TableRepository> {
             .withUpdatedBy(securityContext.getUserPrincipal().getName())
             .withOwner(create.getOwner())
             .withUpdatedAt(System.currentTimeMillis())
-            .withDatabase(create.getDatabase()));
+            .withSchema(create.getSchema()));
   }
 
   private TableTest getTableTest(SecurityContext securityContext, CreateTableTest create) {
